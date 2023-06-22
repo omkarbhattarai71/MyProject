@@ -6,6 +6,6 @@
 </head>
 <body>
 <h1>CBT Dashboard</h1>
-<h4>Welcome <span></span></h4>
+<h4>Welcome <span th:text="${session.username}"></span></h4>  <!-- OGNL = Object Graph Navigation Language(th=thyme leaf) -->
 </body>
 </html>

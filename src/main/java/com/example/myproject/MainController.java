@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
+
 @Controller
 public class MainController{
 
@@ -28,12 +31,21 @@ public class MainController{
 
     }
     @PostMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password){
-        Credential credential = new Credential();
-        credential.getUsername();
-        credential.getPassword();
-        credentialRepository.save(credential);
-        return  "dashboard";
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session){
+        Optional<Credential> matchedCredential = credentialRepository.findById(username);
+        if(matchedCredential.isPresent()){
+            if(matchedCredential.get().getPassword().equals(password)){
+                session.setAttribute("username", username);
+                return "dashboard";
+            }
+            else{
+                return "landingpage";
+            }
+
+        }
+        else {
+            return "dashboard";
+        }
 
     }
     @GetMapping("/save")
