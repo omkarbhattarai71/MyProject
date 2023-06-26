@@ -33,18 +33,18 @@ public class MainController{
         credential.setUsername(username);
         credential.setPassword(password);
         credentialRepository.save(credential);
-        return  "dashboard";
+        return  "usertypelink";
 
     }
     @PostMapping("/userdetails")
-    public String userDetails(@RequestParam("username") String username,
-                              @RequestParam("fname") String fname,
+    public String userDetails(@RequestParam("fname") String fname,
                               @RequestParam("lname") String lname,
                               @RequestParam("email") String email,
                               @RequestParam("phone") String phone, HttpSession session)
     {
         Userdetail udetail = new Userdetail();
-        udetail.setUsername(username);
+        udetail.setUsername((String) session.getAttribute("username"));
+//        udetail.setUsername(username);
         udetail.setFname(fname);
         udetail.setEmail(email);
         udetail.setPhone(phone);
@@ -54,15 +54,15 @@ public class MainController{
     }
 
     @PostMapping("/usertypelinks")
-    public String usertypeLinks(@RequestParam("id") String id,
-                                @RequestParam("username") String username,
-                                @RequestParam("type") String type, HttpSession session){
+    public String usertypeLinks(@RequestParam("type") String type, HttpSession session){
         Usertypelink utypelink = new Usertypelink();
-        utypelink.setId(id);
-        utypelink.setUsername(username);
+        utypelink.setId(String.valueOf(((int)(Math.random()*1000))));
+//        session.setAttribute("username", username);
+        utypelink.setUsername((String) session.getAttribute("username"));
+//        utypelink.setUsername(username);
         utypelink.setType(type);
         usertypelinkRepository.save(utypelink);
-        return "usertypelink";
+        return "interimdashboard";
     }
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session, Model model){    // @RequestParam("type") String type
@@ -75,13 +75,13 @@ public class MainController{
                 Optional<Usertypelink> usertypelink = usertypelinks.stream().filter(usertypelink1 -> usertypelink1.getUsername().equals(username)).findAny();
 
                 if(userdetail.isPresent()){
-                    model.addAttribute("usedetail",userdetail);
+                    model.addAttribute("usedetail",userdetail.get());
 
-                    if(usertypelink.get().getType().equals("BUYER")){
+                    if(usertypelink.get().getType().equals("buyer")){
                         return "buyerdashboard";
 
                     }
-                    else if(usertypelink.get().getType().equals("SELLER")){
+                    else if(usertypelink.get().getType().equals("seller")){
                         return "sellerdashboard";
                     }
                     else{
