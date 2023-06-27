@@ -1,8 +1,10 @@
 package com.example.myproject;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,5 +37,17 @@ public class MainRestController {
         else{
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+
+    @GetMapping("getuserdetail")
+    public Userdetail getuserDetail(){
+        Userdetail udetail = new Userdetail();
+        udetail.setUsername("omkarbhattarai");
+        udetail.setFname("Omkar");
+        udetail.setLname("Bhattarai");
+        udetail.setEmail("omkarbhattarai71@gmail.com");
+        udetail.setPhone("8750086742");
+        return udetail;
     }
 }

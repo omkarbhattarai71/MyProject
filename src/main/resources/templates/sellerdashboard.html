@@ -3,6 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Seller Dashboard</title>
+    <style>
+        /* Styles for the h1 element */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        /* Hover effect for the h1 element */
+        h1:hover {
+            color: #ff8800;
+        }
+
+        /* Styles for the h2 element */
+        h2 {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* Styles for the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        /* Styles for the table cells */
+        td {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+
+        /* Styles for the bold text */
+        b {
+            font-weight: bold;
+        }
+
+        /* Styles for the spans inside table cells */
+        span {
+            margin-left: 5px;
+            color: #555;
+        }
+
+        /* Styles for the spans on hover */
+        span:hover {
+            color: #ff8800;
+        }
+    </style>
+
+
 </head>
 <body>
 <h1>CBT SELLER Dashboard</h1>
@@ -12,21 +66,21 @@
     <table>
         <tr>
             <td>
-                <b>Full Name:</b>
-                <span th:text="${userdetail.fname}"></span>
-                <span th:text="${userdetail.lname}"></span>
+                <b>Name:</b>
+                <span th:text="${usedetail.fname}"></span>
+                <span th:text="${usedetail.lname}"></span>
             </td>
         </tr>
         <tr>
             <td>
                 <b>Email:</b>
-                <span th:text="${userdetail.email}"></span>
+                <span th:text="${usedetail.email}"></span>
             </td>
         </tr>
         <tr>
             <td>
                 <b>Phone:</b>
-                <span th:text="${userdetail.phone}"></span>
+                <span th:text="${usedetail.phone}"></span>
             </td>
         </tr>
     </table>

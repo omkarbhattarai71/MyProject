@@ -28,11 +28,12 @@ public class MainController{
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestParam("username") String username, @RequestParam("password") String password){
+    public String signup(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session){
         Credential credential = new Credential();
         credential.setUsername(username);
         credential.setPassword(password);
         credentialRepository.save(credential);
+        session.setAttribute("username", username);
         return  "usertypelink";
 
     }
@@ -40,7 +41,7 @@ public class MainController{
     public String userDetails(@RequestParam("fname") String fname,
                               @RequestParam("lname") String lname,
                               @RequestParam("email") String email,
-                              @RequestParam("phone") String phone, HttpSession session)
+                              @RequestParam("phone") String phone, HttpSession session, Model model)
     {
         Userdetail udetail = new Userdetail();
         udetail.setUsername((String) session.getAttribute("username"));
@@ -50,7 +51,30 @@ public class MainController{
         udetail.setPhone(phone);
         udetail.setLname(lname);
         userdetailRepository.save(udetail);
-        return "usertypelink";
+        session.setAttribute("fname", fname);
+        session.setAttribute("lname", lname);
+        session.setAttribute("email", email);
+        session.setAttribute("phone", phone);
+        String username = (String) session.getAttribute("username");
+        Optional<Userdetail> userdetail = userdetailRepository.findById(username);
+        List<Usertypelink> usertypelinks = usertypelinkRepository.findAll();
+        Optional<Usertypelink> usertypelink = usertypelinks.stream().filter(usertypelink1 -> usertypelink1.getUsername().equals(username)).findAny();
+
+        if(userdetail.isPresent()){
+            model.addAttribute("usedetail",userdetail.get());
+            if(usertypelink.isPresent() && usertypelink.get().getType().equals("buyer")){
+                return "buyerdashboard";
+            }
+            else if(usertypelink.isPresent() && usertypelink.get().getType().equals("seller")){
+                return "sellerdashboard";
+            }
+            else{
+                return "interimdashboard";
+            }
+        }
+        else{
+            return "interimdashboard";
+        }
     }
 
     @PostMapping("/usertypelinks")
@@ -62,6 +86,7 @@ public class MainController{
 //        utypelink.setUsername(username);
         utypelink.setType(type);
         usertypelinkRepository.save(utypelink);
+        session.setAttribute("type",type);
         return "interimdashboard";
     }
     @PostMapping("/login")
@@ -76,12 +101,10 @@ public class MainController{
 
                 if(userdetail.isPresent()){
                     model.addAttribute("usedetail",userdetail.get());
-
-                    if(usertypelink.get().getType().equals("buyer")){
+                    if(usertypelink.isPresent() && usertypelink.get().getType().equals("buyer")){
                         return "buyerdashboard";
-
                     }
-                    else if(usertypelink.get().getType().equals("seller")){
+                    else if(usertypelink.isPresent() && usertypelink.get().getType().equals("seller")){
                         return "sellerdashboard";
                     }
                     else{
@@ -89,14 +112,15 @@ public class MainController{
                     }
                 }
 //                userdetail.ifPresent(value -> model.addAttribute("userdetail", value));
-
-                return "interimdashboard";
+                else{
+                    return "interimdashboard";
+                }
             }
             else{
                 return "landingpage";
             }
         }
-        else {
+        else{
             return "landingpage";
         }
     }
