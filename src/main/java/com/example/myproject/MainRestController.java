@@ -4,15 +4,13 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("api/1.2")
 public class MainRestController {
     @Autowired
     CredentialRepository credentialRepository;
@@ -40,8 +38,9 @@ public class MainRestController {
     }
 
 
-    @GetMapping("getuserdetail")
-    public Userdetail getuserDetail(){
+    @CrossOrigin("http://localhost:4200/")
+    @GetMapping("getdummyuser")
+    public Userdetail getDummyUser(){
         Userdetail udetail = new Userdetail();
         udetail.setUsername("omkarbhattarai");
         udetail.setFname("Omkar");
